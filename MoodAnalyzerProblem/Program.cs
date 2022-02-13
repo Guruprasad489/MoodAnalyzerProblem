@@ -13,8 +13,8 @@ namespace MoodAnalyzerProblem
             Console.WriteLine("Welcome to Mood Anayzer Program");
 
             //UC1 - Creating MoodAnalyzer object
-            MoodAnalyzer moodAnalyzer = new MoodAnalyzer("I am in Happy Mood");
-            Console.WriteLine("Mood is: "+ moodAnalyzer.AnalyseMood());
+            MoodAnalyzer moodAnalyzer = new MoodAnalyzer("");
+            Console.WriteLine(moodAnalyzer.AnalyseMood());
             Console.ReadLine();
         }
     }
