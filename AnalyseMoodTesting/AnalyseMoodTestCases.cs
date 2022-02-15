@@ -15,53 +15,18 @@ namespace AnalyseMoodTesting
             factory = new MoodAnalyserFactory();
         }
 
-        //TC 1.1 - Method to test Sad Mood
+        //TC 1.1,1.2,2.1 - Method to test Sad Mood and Happy Mood
         [TestMethod]       
-        [TestCategory ("Sad Message")]
-        public void TestSadMoodInMessage()
+        [TestCategory ("Test Mood in Message")]
+        //Arrange
+        [DataRow("I am in sad Mood", "SAD")]
+        [DataRow ("I am in Any Mood", "HAPPY")]
+        [DataRow(null, "HAPPY")]
+        public void TestMoodInMessage(string message, string expected)
         {
-            //Arrange
-            string message = "I am in sad Mood";
-            string expected = "SAD";
             MoodAnalyzer moodAnalyzer = new MoodAnalyzer(message);
-
             //Act
             string actual = moodAnalyzer.AnalyseMood();
-
-            //Assert
-            Assert.AreEqual(expected, actual);
-        }
-
-        //TC 1.2 - Method to test Happy Mood
-        [TestMethod]
-        [TestCategory("Happy Message")]
-        public void TestHappyMoodInMessage()
-        {
-            //Arrange
-            string message = "I am in Any Mood";
-            string expected = "HAPPY";
-            MoodAnalyzer moodAnalyzer = new MoodAnalyzer(message);
-
-            //Act
-            string actual = moodAnalyzer.AnalyseMood();
-
-            //Assert
-            Assert.AreEqual(expected, actual);
-        }
-
-        //TC 2.1 - Method to test Happy Mood in null message
-        [TestMethod]
-        [TestCategory("Exception")]
-        public void GivenNullMessageReturnHappyMood()
-        {
-            //Arrange
-            string message = null;
-            string expected = "HAPPY";
-            MoodAnalyzer moodAnalyzer = new MoodAnalyzer(message);
-
-            //Act
-            string actual = moodAnalyzer.AnalyseMood();
-
             //Assert
             Assert.AreEqual(expected, actual);
         }
@@ -73,18 +38,13 @@ namespace AnalyseMoodTesting
         [DataRow ("", "Message should not be empty")]
         public void GivenNullMessageTestCustomException(string userInput, string expected)
         {
-            //Arrange
-            //string message = null;
-            //string expected = "HAPPY";
             MoodAnalyzer moodAnalyzer = new MoodAnalyzer(userInput);
             try
             {
-                //Act
                 string actual = moodAnalyzer.AnalyseMood();
             }
             catch(MoodAnalyzerException ex)
             {
-                //Assert
                 Assert.AreEqual(expected, ex.Message);
             }
         }
@@ -102,27 +62,12 @@ namespace AnalyseMoodTesting
             expected.Equals(obj);
         }
 
-        //TC 4.2 - improper class details are provided and expected to throw exception Class not found
+        //TC 4.2, 4.3 - improper class, constructor details are provided and expected to throw exception Class not found
         [TestMethod]
         [TestCategory("Reflection")]
         [DataRow("MoodAnalyzerProblem.Reflection.Owner", "Reflection.Owner", "Class not found")]
-        public void GivenImproperClassName_ThrowException(string className, string constructorName, string expected)
-        {
-            try
-            {
-                object actual = factory.CreateMoodMoodAnalyse(className, constructorName);
-            }
-            catch (MoodAnalyzerException ex)
-            {
-                Assert.AreEqual(expected, ex.Message);
-            }
-        }
-
-        //TC 4.3 - improper constructor details are provided and expected to throw exception Constructor not found
-        [TestMethod]
-        [TestCategory("Reflection")]
         [DataRow("MoodAnalyzerProblem.Reflection.Customer", "Reflection.OwnerMood", "Constructor not found")]
-        public void GivenImproperConstructorName_ThrowException(string className, string constructorName, string expected)
+        public void GivenImproperClassName_ThrowException(string className, string constructorName, string expected)
         {
             try
             {
@@ -162,12 +107,9 @@ namespace AnalyseMoodTesting
         [DataRow("Student", "I am in Sad mood", "Could not find class")]
         public void GivenMessageReturnParameterizedClassNotFound(string className, string message, string expextedError)
         {
-            MoodAnalyzer expected = new MoodAnalyzer(message);
-            object obj = null;
             try
             {
-                obj = factory.CreateMoodMoodAnalyserParameterObject(className, "MoodAnalyzer", message);
-
+                object obj = factory.CreateMoodMoodAnalyserParameterObject(className, "MoodAnalyzer", message);
             }
             catch (MoodAnalyzerException actual)
             {
@@ -182,16 +124,30 @@ namespace AnalyseMoodTesting
         [DataRow("Student", "I am in Sad mood", "Could not find constructor")]
         public void GivenMessageReturnParameterizedConstructorNotFound(string constructor, string message, string expextedError)
         {
-            MoodAnalyzer expected = new MoodAnalyzer(message);
-            object obj = null;
             try
             {
-                obj = factory.CreateMoodMoodAnalyserParameterObject("MoodAnalyzer", constructor, message);
-
+                object obj = factory.CreateMoodMoodAnalyserParameterObject("MoodAnalyzer", constructor, message);
             }
             catch (MoodAnalyzerException actual)
             {
                 Assert.AreEqual(expextedError, actual.Message);
+            }
+        }
+
+        //UC 6.1,6.2 - Method to invoke analyse mood method to return happy or sad or invalid method
+        [TestCategory("Reflection")]
+        [TestMethod]
+        [DataRow("HAPPY")]
+        [DataRow("Method not found")]
+        public void ReflectionReturnMethod(string expected)
+        {
+            try
+            {
+                string actual = factory.InvokeMoodAnalyzer("happy", "AnalyseMood");
+            }
+            catch(MoodAnalyzerException ex)
+            {
+                Assert.AreEqual(expected, ex.Message);
             }
         }
     }
