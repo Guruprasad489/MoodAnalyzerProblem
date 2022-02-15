@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using MoodAnalyzerProblem;
+using MoodAnalyzerProblem.Reflection;
 
 namespace AnalyseMoodTesting
 {
@@ -77,6 +78,54 @@ namespace AnalyseMoodTesting
             catch(MoodAnalyzerException ex)
             {
                 //Assert
+                Assert.AreEqual(expected, ex.Message);
+            }
+        }
+
+        //TC 4.1 - Proper class details are provided and expected to return the MoodAnalyser Object
+        [TestMethod]
+        [TestCategory("Reflection")]
+        [DataRow("MoodAnalyzerProblem.Reflection.Customer", "Customer")]
+        public void GivenMoodAnalyzerClassName_ReturnMoodAnalyzerObject(string className, string constructorName)
+        {
+            MoodAnalyzer expected = new MoodAnalyzer();
+            object obj = null;
+
+                MoodAnalyserFactory factory = new MoodAnalyserFactory();
+                obj = factory.CreateMoodMoodAnalyse(className, constructorName);
+                expected.Equals(obj);
+        }
+
+        //TC 4.2 - improper class details are provided and expected to throw exception Class not found
+        [TestMethod]
+        [TestCategory("Reflection")]
+        [DataRow("MoodAnalyzerProblem.Reflection.Owner", "Reflection.Owner", "Class not found")]
+        public void GivenImproperClassName_ThrowException(string className, string constructorName, string expected)
+        {
+            try
+            {
+                MoodAnalyserFactory factory = new MoodAnalyserFactory();
+                object actual = factory.CreateMoodMoodAnalyse(className, constructorName);
+            }
+            catch (MoodAnalyzerException ex)
+            {
+                Assert.AreEqual(expected, ex.Message);
+            }
+        }
+
+        //TC 4.3 - improper constructor details are provided and expected to throw exception Constructor not found
+        [TestMethod]
+        [TestCategory("Reflection")]
+        [DataRow("MoodAnalyzerProblem.Reflection.Customer", "Reflection.OwnerMood", "Constructor not found")]
+        public void GivenImproperConstructorName_ThrowException(string className, string constructorName, string expected)
+        {
+            try
+            {
+                MoodAnalyserFactory factory = new MoodAnalyserFactory();
+                object actual = factory.CreateMoodMoodAnalyse(className, constructorName);
+            }
+            catch (MoodAnalyzerException ex)
+            {
                 Assert.AreEqual(expected, ex.Message);
             }
         }

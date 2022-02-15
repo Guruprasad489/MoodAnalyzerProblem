@@ -15,7 +15,9 @@ namespace MoodAnalyzerProblem
         public enum ExceptionTypes
         {
             NULL_MOOD_EXCEPTION,
-            EMPTY_MOOD_EXCEPTION
+            EMPTY_MOOD_EXCEPTION,
+            NO_SUCH_CLASS,
+            NO_SUCH_METHOD
         }
 
         //Constructor to initialize ExceptionTypes

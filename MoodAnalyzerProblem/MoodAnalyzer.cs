@@ -9,7 +9,12 @@ namespace MoodAnalyzerProblem
     public class MoodAnalyzer
     {
         public string message;
-        
+
+        public MoodAnalyzer()
+        {
+            Console.WriteLine("Default Constructor");
+        }
+
         //Constructor for initializing the message
         public MoodAnalyzer(string message)
         {
