@@ -15,7 +15,7 @@ namespace AnalyseMoodTesting
             reflector = new MoodAnalyserReflector();
         }
 
-        //TC 1.1,1.2,2.1 - Method to test Sad Mood and Happy Mood
+        //TC 1.1, 1.2, 2.1 - Method to test Sad Mood and Happy Mood
         [TestMethod]       
         [TestCategory ("Test Mood in Message")]
         //Arrange
@@ -134,7 +134,7 @@ namespace AnalyseMoodTesting
             }
         }
 
-        //UC 6.1,6.2 - Method to invoke analyse mood method to return happy or sad or invalid method
+        //UC 6.1, 6.2 - Method to invoke analyse mood method to return happy or sad or invalid method
         [TestCategory("Reflection")]
         [TestMethod]
         [DataRow("HAPPY")]
@@ -146,6 +146,27 @@ namespace AnalyseMoodTesting
                 string actual = reflector.InvokeMoodAnalyzer("happy", "AnalyseMood");
             }
             catch(MoodAnalyzerException ex)
+            {
+                Assert.AreEqual(expected, ex.Message);
+            }
+        }
+
+        //UC 7.1, 7.2, 7.3 Method to set field value and invoke method to return Happy and throw exception if invalid field
+        [TestCategory("Reflection")]
+        [TestMethod]
+        [DataRow("happy", "happy", "message")]
+        [DataRow("I am sad", "I am sad", "message")]
+        [DataRow("happy", "Field not found", "Chat")]
+        [DataRow("sad", "Field not found", "Chats")]
+        [DataRow(null, "Message should not be null", "message")]
+        public void ReflectionReturnSetValueAndInvaidField(string value, string expected, string fieldName)
+        {
+            try
+            {
+                string actual = reflector.SetField(value, fieldName);
+                Assert.AreEqual(expected, actual);
+            }
+            catch (MoodAnalyzerException ex)
             {
                 Assert.AreEqual(expected, ex.Message);
             }
