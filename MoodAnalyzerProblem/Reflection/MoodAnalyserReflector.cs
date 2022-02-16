@@ -8,10 +8,10 @@ using System.Threading.Tasks;
 
 namespace MoodAnalyzerProblem.Reflection
 {
-    public class MoodAnalyserFactory
+    public class MoodAnalyserReflector
     {
         /// <summary>
-        /// Create MoodAnalyserFactory and specify static method to create MoodAnalyser Object
+        /// Create MoodAnalyserReflector and specify static method to create MoodAnalyser Object
         /// </summary>
         /// <param name="className"></param>
         /// <param name="constructorName"></param>
@@ -72,7 +72,7 @@ namespace MoodAnalyzerProblem.Reflection
             {
                 Type type = typeof(MoodAnalyzer);
                 MethodInfo methodInfo = type.GetMethod(methodName);
-                MoodAnalyserFactory reflector = new MoodAnalyserFactory();
+                MoodAnalyserReflector reflector = new MoodAnalyserReflector();
                 object moodAnalyserObject = reflector.CreateMoodMoodAnalyserParameterObject("MoodAnalyzerProblem.MoodAnalyzer", "MoodAnalyzer", message);
                 object info = methodInfo.Invoke(moodAnalyserObject, null);
                 return info.ToString();
