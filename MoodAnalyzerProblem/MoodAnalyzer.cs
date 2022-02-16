@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,6 +9,7 @@ namespace MoodAnalyzerProblem
 {
     public class MoodAnalyzer
     {
+        [Required(ErrorMessage ="{0} Should not be null or empty")]        //Annotation - Attribute
         public string message;
 
         public MoodAnalyzer()
